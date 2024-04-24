@@ -70,6 +70,28 @@ func (e *Editor) draw() {
 	e.screen.Show()
 }
 
-func (e *Editor) getLastLine() *[]rune {
-	return &(e.data[len(e.data)-1])
+func (e *Editor) handleCommand(cmd command.Command) {
+	switch cmd := cmd.(type) {
+	case command.InsertChar:
+		e.insertChar(cmd.Char)
+	case command.InsertNewLine:
+		e.insertNewLine()
+	case command.DelChar:
+		e.deleteChar()
+	case command.MovCurDown:
+		e.MovCurDown()
+	case command.MovCurUp:
+		e.MovCurUp()
+	case command.MovCurRight:
+		e.MovCurRight()
+	case command.MovCurLeft:
+		e.MovCurLeft()
+	}
+}
+
+func (e *Editor) clearLine(index int) {
+	width, _ := e.screen.Size()
+	for i := 0; i < width; i++ {
+		e.screen.SetContent(i, index, ' ', nil, tcell.StyleDefault)
+	}
 }

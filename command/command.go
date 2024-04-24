@@ -18,8 +18,32 @@ func (c InsertNewLine) Command() string {
 	return "Insert new line"
 }
 
-type DeleteChar struct{}
+type DelChar struct{}
 
-func (c DeleteChar) Command() string {
+func (c DelChar) Command() string {
 	return "Delete character"
+}
+
+type MovCurDown struct{}
+
+func (c MovCurDown) Command() string {
+	return "Move cursor down"
+}
+
+type MovCurUp struct{}
+
+func (c MovCurUp) Command() string {
+	return "Move cursor left"
+}
+
+type MovCurRight struct{}
+
+func (c MovCurRight) Command() string {
+	return "Move cursor right"
+}
+
+type MovCurLeft struct{}
+
+func (c MovCurLeft) Command() string {
+	return "Move cursor left"
 }
