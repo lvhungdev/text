@@ -11,6 +11,8 @@ type Editor struct {
 	data [][]rune
 	cX   int
 	cY   int
+	oX   int
+	oY   int
 }
 
 func New() Editor {
@@ -54,19 +56,16 @@ func (e *Editor) Init() error {
 	}
 }
 
+// TODO optimize this func
+// we should only draw within screen size, not necessarily the whole data
 func (e *Editor) draw() {
-	x, y := 0, 0
-
-	for _, line := range e.data {
-		for _, char := range line {
-			e.screen.SetContent(x, y, char, nil, tcell.StyleDefault)
-			x++
+	for y := e.oY; y < len(e.data); y++ {
+		for x := e.oX; x < len(e.data[y]); x++ {
+			e.screen.SetContent(x-e.oX, y-e.oY, e.data[y][x], nil, tcell.StyleDefault)
 		}
-		x = 0
-		y++
 	}
 
-	e.screen.ShowCursor(e.cX, e.cY)
+	e.screen.ShowCursor(e.cX-e.oX, e.cY-e.oY)
 	e.screen.Show()
 }
 

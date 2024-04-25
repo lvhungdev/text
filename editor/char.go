@@ -1,13 +1,13 @@
 package editor
 
 import (
-	// "github.com/gdamore/tcell/v2"
 	"github.com/lvhungdev/text/utils"
 )
 
 func (e *Editor) insertChar(char rune) {
 	e.data[e.cY] = utils.SliceInsertAt(e.data[e.cY], e.cX, char)
 	e.cX++
+	e.syncOffset()
 }
 
 func (e *Editor) insertNewLine() {
@@ -35,6 +35,7 @@ func (e *Editor) insertNewLine() {
 
 	e.cY++
 	e.cX = 0
+	e.syncOffset()
 }
 
 func (e *Editor) deleteChar() {
@@ -60,4 +61,6 @@ func (e *Editor) deleteChar() {
 		e.cX--
 		e.clearLine(e.cY)
 	}
+
+	e.syncOffset()
 }

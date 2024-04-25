@@ -10,6 +10,8 @@ func (e *Editor) MovCurDown() {
 	if e.cX > len(e.data[e.cY]) {
 		e.cX = len(e.data[e.cY])
 	}
+
+	e.syncOffset()
 }
 
 func (e *Editor) MovCurUp() {
@@ -22,6 +24,8 @@ func (e *Editor) MovCurUp() {
 	if e.cX > len(e.data[e.cY]) {
 		e.cX = len(e.data[e.cY])
 	}
+
+	e.syncOffset()
 }
 
 func (e *Editor) MovCurRight() {
@@ -29,6 +33,7 @@ func (e *Editor) MovCurRight() {
 		return
 	}
 	e.cX++
+	e.syncOffset()
 }
 
 func (e *Editor) MovCurLeft() {
@@ -36,4 +41,5 @@ func (e *Editor) MovCurLeft() {
 		return
 	}
 	e.cX--
+	e.syncOffset()
 }
