@@ -29,7 +29,7 @@ func (e *Editor) insertNewLine() {
 	}
 
 	w, _ := e.screen.Size()
-	for i := index; i < len(e.data) && i < w; i++ {
+	for i := index - e.oY; i < len(e.data) && i < w; i++ {
 		e.clearLine(i)
 	}
 
@@ -53,13 +53,13 @@ func (e *Editor) deleteChar() {
 		e.data[e.cY] = append(e.data[e.cY], line...)
 
 		w, _ := e.screen.Size()
-		for i := e.cY; i <= len(e.data) && i < w; i++ {
+		for i := e.cY - e.oY; i <= len(e.data) && i < w; i++ {
 			e.clearLine(i)
 		}
 	} else {
 		e.data[e.cY] = utils.SliceRemoveAt(e.data[e.cY], e.cX-1)
 		e.cX--
-		e.clearLine(e.cY)
+		e.clearLine(e.cY - e.oY)
 	}
 
 	e.syncOffset()
