@@ -7,6 +7,7 @@ import (
 
 type Editor struct {
 	screen tcell.Screen
+	path   string
 
 	data [][]rune
 	cX   int
@@ -15,11 +16,15 @@ type Editor struct {
 	oY   int
 }
 
-func New() Editor {
-	return Editor{
-		data: [][]rune{
+func New(data [][]rune) Editor {
+	if data == nil || len(data) == 0 {
+		data = [][]rune{
 			{},
-		},
+		}
+	}
+
+	return Editor{
+		data: data,
 	}
 }
 
@@ -49,11 +54,35 @@ func (e *Editor) Init() error {
 			if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC {
 				return nil
 			}
-			e.handleCommand(command.Get(ev))
+			// TODO handle error
+			_ = e.handleCommand(command.Get(ev))
 		}
 
 		e.draw()
 	}
+}
+
+func (e *Editor) handleCommand(cmd command.Command) error {
+	switch cmd := cmd.(type) {
+	case command.InsertChar:
+		e.insertChar(cmd.Char)
+	case command.InsertNewLine:
+		e.insertNewLine()
+	case command.DelChar:
+		e.deleteChar()
+	case command.MovCurDown:
+		e.movCurDown()
+	case command.MovCurUp:
+		e.movCurUp()
+	case command.MovCurRight:
+		e.movCurRight()
+	case command.MovCurLeft:
+		e.movCurLeft()
+	case command.Save:
+		return e.save()
+	}
+
+	return nil
 }
 
 // TODO optimize this func
@@ -67,25 +96,6 @@ func (e *Editor) draw() {
 
 	e.screen.ShowCursor(e.cX-e.oX, e.cY-e.oY)
 	e.screen.Show()
-}
-
-func (e *Editor) handleCommand(cmd command.Command) {
-	switch cmd := cmd.(type) {
-	case command.InsertChar:
-		e.insertChar(cmd.Char)
-	case command.InsertNewLine:
-		e.insertNewLine()
-	case command.DelChar:
-		e.deleteChar()
-	case command.MovCurDown:
-		e.MovCurDown()
-	case command.MovCurUp:
-		e.MovCurUp()
-	case command.MovCurRight:
-		e.MovCurRight()
-	case command.MovCurLeft:
-		e.MovCurLeft()
-	}
 }
 
 func (e *Editor) clearLine(index int) {

@@ -1,9 +1,26 @@
 package main
 
-import "github.com/lvhungdev/text/editor"
+import (
+	"os"
+
+	"github.com/lvhungdev/text/editor"
+)
 
 func main() {
-	e := editor.New()
+	var e editor.Editor
+
+	args := os.Args[1:]
+	if len(args) >= 1 {
+		v, err := editor.FromFile(args[0])
+		if err != nil {
+			panic(err)
+		}
+
+		e = v
+	} else {
+		e = editor.New(nil)
+	}
+
 	err := e.Init()
 	if err != nil {
 		panic(err)

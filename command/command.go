@@ -47,3 +47,9 @@ type MovCurLeft struct{}
 func (c MovCurLeft) Command() string {
 	return "Move cursor left"
 }
+
+type Save struct{}
+
+func (c Save) Command() string {
+	return "Save file"
+}

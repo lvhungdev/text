@@ -1,6 +1,6 @@
 package editor
 
-func (e *Editor) MovCurDown() {
+func (e *Editor) movCurDown() {
 	if e.cY == len(e.data)-1 {
 		return
 	}
@@ -14,7 +14,7 @@ func (e *Editor) MovCurDown() {
 	e.syncOffset()
 }
 
-func (e *Editor) MovCurUp() {
+func (e *Editor) movCurUp() {
 	if e.cY == 0 {
 		return
 	}
@@ -28,7 +28,7 @@ func (e *Editor) MovCurUp() {
 	e.syncOffset()
 }
 
-func (e *Editor) MovCurRight() {
+func (e *Editor) movCurRight() {
 	if e.cX == len(e.data[e.cY]) {
 		return
 	}
@@ -36,7 +36,7 @@ func (e *Editor) MovCurRight() {
 	e.syncOffset()
 }
 
-func (e *Editor) MovCurLeft() {
+func (e *Editor) movCurLeft() {
 	if e.cX == 0 {
 		return
 	}
