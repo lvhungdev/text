@@ -9,26 +9,24 @@ type Editor struct {
 	screen tcell.Screen
 	path   string
 
-	data [][]rune
-	cX   int
-	cY   int
-	oX   int
-	oY   int
+	content      [][]rune
+	cursorRow    int
+	cursorCol    int
+	offsetRow    int
+	offsetCol    int
+	padRow       int
+	padCol       int
+	screenWidth  int
+	screenHeight int
 }
 
-func New(data [][]rune) Editor {
-	if data == nil || len(data) == 0 {
-		data = [][]rune{
-			{},
-		}
-	}
-
+func New() Editor {
 	return Editor{
-		data: data,
+		content: [][]rune{{}},
 	}
 }
 
-func (e *Editor) Init() error {
+func (e *Editor) Start() error {
 	s, err := tcell.NewScreen()
 	if err != nil {
 		return err
@@ -41,14 +39,12 @@ func (e *Editor) Init() error {
 	e.screen = s
 	defer e.screen.Fini()
 
-	e.screen.Clear()
-
 	for {
 		ev := e.screen.PollEvent()
 
 		switch ev := ev.(type) {
 		case *tcell.EventResize:
-			s.Sync()
+			e.syncScreenSize()
 
 		case *tcell.EventKey:
 			if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC {
@@ -58,7 +54,33 @@ func (e *Editor) Init() error {
 			_ = e.handleCommand(command.Get(ev))
 		}
 
-		e.draw()
+		// TODO handle error
+		_ = e.draw()
+	}
+}
+
+func (e *Editor) syncScreenSize() {
+	e.screen.Sync()
+
+	w, h := e.screen.Size()
+	e.screenWidth = w - e.padCol
+	e.screenHeight = h - e.padRow
+}
+
+func (e *Editor) syncOffset() {
+	diffRow := e.cursorRow - e.offsetRow
+	diffCol := e.cursorCol - e.offsetCol
+
+	if diffCol < 0 {
+		e.offsetCol = e.cursorCol
+	} else if diffCol >= e.screenWidth {
+		e.offsetCol = e.cursorCol - e.screenWidth + 1
+	}
+
+	if diffRow < 0 {
+		e.offsetRow = e.cursorRow
+	} else if diffRow >= e.screenHeight {
+		e.offsetRow = e.cursorRow - e.screenHeight + 1
 	}
 }
 
@@ -83,24 +105,4 @@ func (e *Editor) handleCommand(cmd command.Command) error {
 	}
 
 	return nil
-}
-
-// TODO optimize this func
-// we should only draw within screen size, not necessarily the whole data
-func (e *Editor) draw() {
-	for y := e.oY; y < len(e.data); y++ {
-		for x := e.oX; x < len(e.data[y]); x++ {
-			e.screen.SetContent(x-e.oX, y-e.oY, e.data[y][x], nil, tcell.StyleDefault)
-		}
-	}
-
-	e.screen.ShowCursor(e.cX-e.oX, e.cY-e.oY)
-	e.screen.Show()
-}
-
-func (e *Editor) clearLine(index int) {
-	width, _ := e.screen.Size()
-	for i := 0; i < width; i++ {
-		e.screen.SetContent(i, index, ' ', nil, tcell.StyleDefault)
-	}
 }

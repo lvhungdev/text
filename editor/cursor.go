@@ -1,45 +1,45 @@
 package editor
 
 func (e *Editor) movCurDown() {
-	if e.cY == len(e.data)-1 {
+	if e.cursorRow == len(e.content)-1 {
 		return
 	}
 
-	e.cY++
+	e.cursorRow++
 
-	if e.cX > len(e.data[e.cY]) {
-		e.cX = len(e.data[e.cY])
+	if e.cursorCol > len(e.content[e.cursorRow]) {
+		e.cursorCol = len(e.content[e.cursorRow])
 	}
 
 	e.syncOffset()
 }
 
 func (e *Editor) movCurUp() {
-	if e.cY == 0 {
+	if e.cursorRow == 0 {
 		return
 	}
 
-	e.cY--
+	e.cursorRow--
 
-	if e.cX > len(e.data[e.cY]) {
-		e.cX = len(e.data[e.cY])
+	if e.cursorCol > len(e.content[e.cursorRow]) {
+		e.cursorCol = len(e.content[e.cursorRow])
 	}
 
 	e.syncOffset()
 }
 
 func (e *Editor) movCurRight() {
-	if e.cX == len(e.data[e.cY]) {
+	if e.cursorCol == len(e.content[e.cursorRow]) {
 		return
 	}
-	e.cX++
+	e.cursorCol++
 	e.syncOffset()
 }
 
 func (e *Editor) movCurLeft() {
-	if e.cX == 0 {
+	if e.cursorCol == 0 {
 		return
 	}
-	e.cX--
+	e.cursorCol--
 	e.syncOffset()
 }

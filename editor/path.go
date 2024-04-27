@@ -15,7 +15,7 @@ func FromFile(path string) (Editor, error) {
 
 	file, err := os.Open(path)
 	if err != nil {
-		editor.data = [][]rune{{}}
+		editor.content = [][]rune{{}}
 		return editor, nil
 	}
 	defer func(file *os.File) {
@@ -39,7 +39,7 @@ func FromFile(path string) (Editor, error) {
 
 	lines := bytes.Split(content, []byte("\n"))
 	for _, line := range lines {
-		editor.data = append(editor.data, []rune(string(line)))
+		editor.content = append(editor.content, []rune(string(line)))
 	}
 
 	return editor, nil
@@ -56,7 +56,7 @@ func (e *Editor) save() error {
 	}
 
 	var content string
-	for _, line := range e.data {
+	for _, line := range e.content {
 		content = content + string(line) + "\n"
 	}
 

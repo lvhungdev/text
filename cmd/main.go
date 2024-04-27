@@ -18,10 +18,10 @@ func main() {
 
 		e = v
 	} else {
-		e = editor.New(nil)
+		e = editor.New()
 	}
 
-	err := e.Init()
+	err := e.Start()
 	if err != nil {
 		panic(err)
 	}
