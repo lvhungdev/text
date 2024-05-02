@@ -5,46 +5,42 @@ import (
 )
 
 func (e *Editor) insertChar(char rune) {
-	e.content[e.cursorRow] = utils.SliceInsertAt(e.content[e.cursorRow], e.cursorCol, char)
-	e.cursorCol++
-	e.syncOffset()
+	e.content[e.curRow] = utils.SliceInsertAt(e.content[e.curRow], e.curCol, char)
+	e.curCol++
 }
 
 func (e *Editor) insertNewLine() {
-	if e.cursorCol == 0 {
-		e.content = utils.SliceInsertAt(e.content, e.cursorRow, []rune{})
-	} else if e.cursorCol == len(e.content[e.cursorRow]) {
-		e.content = utils.SliceInsertAt(e.content, e.cursorRow+1, []rune{})
+	if e.curCol == 0 {
+		e.content = utils.SliceInsertAt(e.content, e.curRow, []rune{})
+	} else if e.curCol == len(e.content[e.curRow]) {
+		e.content = utils.SliceInsertAt(e.content, e.curRow+1, []rune{})
 	} else {
-		current := e.content[e.cursorRow][:e.cursorCol]
-		new := e.content[e.cursorRow][e.cursorCol:]
+		current := e.content[e.curRow][:e.curCol]
+		new := e.content[e.curRow][e.curCol:]
 
-		e.content[e.cursorRow] = current
-		e.content = utils.SliceInsertAt(e.content, e.cursorRow+1, new)
+		e.content[e.curRow] = current
+		e.content = utils.SliceInsertAt(e.content, e.curRow+1, new)
 	}
 
-	e.cursorRow++
-	e.cursorCol = 0
-	e.syncOffset()
+	e.curRow++
+	e.curCol = 0
 }
 
 func (e *Editor) deleteChar() {
-	if e.cursorCol == 0 && e.cursorRow == 0 {
+	if e.curCol == 0 && e.curRow == 0 {
 		return
 	}
 
-	if e.cursorCol == 0 {
-		line := e.content[e.cursorRow]
+	if e.curCol == 0 {
+		line := e.content[e.curRow]
 
-		e.content = utils.SliceRemoveAt(e.content, e.cursorRow)
-		e.cursorRow--
-		e.cursorCol = len(e.content[e.cursorRow])
+		e.content = utils.SliceRemoveAt(e.content, e.curRow)
+		e.curRow--
+		e.curCol = len(e.content[e.curRow])
 
-		e.content[e.cursorRow] = append(e.content[e.cursorRow], line...)
+		e.content[e.curRow] = append(e.content[e.curRow], line...)
 	} else {
-		e.content[e.cursorRow] = utils.SliceRemoveAt(e.content[e.cursorRow], e.cursorCol-1)
-		e.cursorCol--
+		e.content[e.curRow] = utils.SliceRemoveAt(e.content[e.curRow], e.curCol-1)
+		e.curCol--
 	}
-
-	e.syncOffset()
 }
