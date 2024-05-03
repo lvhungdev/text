@@ -1,6 +1,8 @@
 package renderer
 
 import (
+	"strconv"
+
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -51,19 +53,25 @@ func (r *Renderer) Render() {
 
 	content := r.editor.Content()
 	cRow, cCol := r.editor.Cursor()
+	lineNumbPad := len(strconv.Itoa(len(content)))
 
 	r.syncOffset()
 
-	for i := 0; i < len(content) && i < r.region.height; i++ {
-		rowToRender := min(i+r.offset.row, len(content)-1)
+	for i := 0; i < len(content)-r.offset.row && i < r.region.height; i++ {
+		rowToRender := i + r.offset.row
 		colsToRender := min(r.offset.col, len(content[rowToRender]))
 
-		r.renderChars(content[rowToRender][colsToRender:], i, 0)
+		r.renderLine(content[rowToRender][colsToRender:], i, []rune(strconv.Itoa(rowToRender+1)), lineNumbPad)
 	}
 
-	r.screen.ShowCursor(r.region.col-r.offset.col+cCol, r.region.row-r.offset.row+cRow)
+	r.screen.ShowCursor(r.region.col-r.offset.col+lineNumbPad+2+cCol, r.region.row-r.offset.row+cRow)
 
 	r.screen.Show()
+}
+
+func (r *Renderer) renderLine(chars []rune, row int, lineNumb []rune, lineNumbPad int) {
+	r.renderChars(lineNumb, row, lineNumbPad-len(lineNumb))
+	r.renderChars(chars, row, lineNumbPad+2)
 }
 
 func (r *Renderer) renderChars(chars []rune, row, col int) {
