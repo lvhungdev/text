@@ -5,42 +5,42 @@ import (
 )
 
 func (e *Editor) insertChar(char rune) {
-	e.content[e.curRow] = utils.SliceInsertAt(e.content[e.curRow], e.curCol, char)
-	e.curCol++
+	e.content[e.cur.row] = utils.SliceInsertAt(e.content[e.cur.row], e.cur.col, char)
+	e.cur.col++
 }
 
 func (e *Editor) insertNewLine() {
-	if e.curCol == 0 {
-		e.content = utils.SliceInsertAt(e.content, e.curRow, []rune{})
-	} else if e.curCol == len(e.content[e.curRow]) {
-		e.content = utils.SliceInsertAt(e.content, e.curRow+1, []rune{})
+	if e.cur.col == 0 {
+		e.content = utils.SliceInsertAt(e.content, e.cur.row, []rune{})
+	} else if e.cur.col == len(e.content[e.cur.row]) {
+		e.content = utils.SliceInsertAt(e.content, e.cur.row+1, []rune{})
 	} else {
-		current := e.content[e.curRow][:e.curCol]
-		new := e.content[e.curRow][e.curCol:]
+		current := e.content[e.cur.row][:e.cur.col]
+		new := e.content[e.cur.row][e.cur.col:]
 
-		e.content[e.curRow] = current
-		e.content = utils.SliceInsertAt(e.content, e.curRow+1, new)
+		e.content[e.cur.row] = current
+		e.content = utils.SliceInsertAt(e.content, e.cur.row+1, new)
 	}
 
-	e.curRow++
-	e.curCol = 0
+	e.cur.row++
+	e.cur.col = 0
 }
 
 func (e *Editor) deleteChar() {
-	if e.curCol == 0 && e.curRow == 0 {
+	if e.cur.col == 0 && e.cur.row == 0 {
 		return
 	}
 
-	if e.curCol == 0 {
-		line := e.content[e.curRow]
+	if e.cur.col == 0 {
+		line := e.content[e.cur.row]
 
-		e.content = utils.SliceRemoveAt(e.content, e.curRow)
-		e.curRow--
-		e.curCol = len(e.content[e.curRow])
+		e.content = utils.SliceRemoveAt(e.content, e.cur.row)
+		e.cur.row--
+		e.cur.col = len(e.content[e.cur.row])
 
-		e.content[e.curRow] = append(e.content[e.curRow], line...)
+		e.content[e.cur.row] = append(e.content[e.cur.row], line...)
 	} else {
-		e.content[e.curRow] = utils.SliceRemoveAt(e.content[e.curRow], e.curCol-1)
-		e.curCol--
+		e.content[e.cur.row] = utils.SliceRemoveAt(e.content[e.cur.row], e.cur.col-1)
+		e.cur.col--
 	}
 }

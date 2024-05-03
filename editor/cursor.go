@@ -1,39 +1,54 @@
 package editor
 
-func (e *Editor) movCurDown() {
-	if e.curRow == len(e.content)-1 {
+func (e *Editor) movCurDown(sel bool) {
+	if e.cur.row == len(e.content)-1 {
 		return
 	}
 
-	e.curRow++
+	e.cur.row++
 
-	if e.curCol > len(e.content[e.curRow]) {
-		e.curCol = len(e.content[e.curRow])
+	if e.cur.col > len(e.content[e.cur.row]) {
+		e.cur.col = len(e.content[e.cur.row])
 	}
+
+	e.handleSel(sel)
 }
 
-func (e *Editor) movCurUp() {
-	if e.curRow == 0 {
+func (e *Editor) movCurUp(sel bool) {
+	if e.cur.row == 0 {
 		return
 	}
 
-	e.curRow--
+	e.cur.row--
 
-	if e.curCol > len(e.content[e.curRow]) {
-		e.curCol = len(e.content[e.curRow])
+	if e.cur.col > len(e.content[e.cur.row]) {
+		e.cur.col = len(e.content[e.cur.row])
 	}
+
+	e.handleSel(sel)
 }
 
-func (e *Editor) movCurRight() {
-	if e.curCol == len(e.content[e.curRow]) {
+func (e *Editor) movCurRight(sel bool) {
+	if e.cur.col == len(e.content[e.cur.row]) {
 		return
 	}
-	e.curCol++
+	e.cur.col++
+
+	e.handleSel(sel)
 }
 
-func (e *Editor) movCurLeft() {
-	if e.curCol == 0 {
+func (e *Editor) movCurLeft(sel bool) {
+	if e.cur.col == 0 {
 		return
 	}
-	e.curCol--
+	e.cur.col--
+
+	e.handleSel(sel)
+}
+
+func (e *Editor) handleSel(sel bool) {
+	e.selEnd = e.cur
+	if !sel {
+		e.selBegin = e.cur
+	}
 }

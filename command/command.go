@@ -11,12 +11,20 @@ type InsertNewLine struct{}
 
 type DelChar struct{}
 
-type MovCurDown struct{}
+type MovCurDown struct {
+	Sel bool
+}
 
-type MovCurUp struct{}
+type MovCurUp struct {
+	Sel bool
+}
 
-type MovCurRight struct{}
+type MovCurRight struct {
+	Sel bool
+}
 
-type MovCurLeft struct{}
+type MovCurLeft struct {
+	Sel bool
+}
 
 type Save struct{}

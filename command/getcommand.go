@@ -3,7 +3,7 @@ package command
 import "github.com/gdamore/tcell/v2"
 
 func Get(e *tcell.EventKey) Command {
-	_, key, ch := e.Modifiers(), e.Key(), e.Rune()
+	mod, key, ch := e.Modifiers(), e.Key(), e.Rune()
 
 	switch key {
 	case tcell.KeyEnter:
@@ -11,13 +11,21 @@ func Get(e *tcell.EventKey) Command {
 	case tcell.KeyDelete, tcell.KeyBackspace2:
 		return DelChar{}
 	case tcell.KeyDown:
-		return MovCurDown{}
+		return MovCurDown{
+			Sel: mod == tcell.ModShift,
+		}
 	case tcell.KeyUp:
-		return MovCurUp{}
+		return MovCurUp{
+			Sel: mod == tcell.ModShift,
+		}
 	case tcell.KeyRight:
-		return MovCurRight{}
+		return MovCurRight{
+			Sel: mod == tcell.ModShift,
+		}
 	case tcell.KeyLeft:
-		return MovCurLeft{}
+		return MovCurLeft{
+			Sel: mod == tcell.ModShift,
+		}
 	case tcell.KeyCtrlS:
 		return Save{}
 

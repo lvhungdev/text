@@ -4,10 +4,16 @@ import (
 	"github.com/lvhungdev/text/command"
 )
 
+type point struct {
+	row int
+	col int
+}
+
 type Editor struct {
-	content [][]rune
-	curRow  int
-	curCol  int
+	content  [][]rune
+	cur      point
+	selBegin point
+	selEnd   point
 }
 
 func New(content [][]rune) Editor {
@@ -25,7 +31,11 @@ func (e *Editor) Content() [][]rune {
 }
 
 func (e *Editor) Cursor() (int, int) {
-	return e.curRow, e.curCol
+	return e.cur.row, e.cur.col
+}
+
+func (e *Editor) Selection() (int, int, int, int) {
+	return e.selBegin.row, e.selBegin.col, e.selEnd.row, e.selEnd.col
 }
 
 func (e *Editor) HandleCommand(cmd command.Command) error {
@@ -37,13 +47,13 @@ func (e *Editor) HandleCommand(cmd command.Command) error {
 	case command.DelChar:
 		e.deleteChar()
 	case command.MovCurDown:
-		e.movCurDown()
+		e.movCurDown(cmd.Sel)
 	case command.MovCurUp:
-		e.movCurUp()
+		e.movCurUp(cmd.Sel)
 	case command.MovCurRight:
-		e.movCurRight()
+		e.movCurRight(cmd.Sel)
 	case command.MovCurLeft:
-		e.movCurLeft()
+		e.movCurLeft(cmd.Sel)
 	}
 
 	return nil
