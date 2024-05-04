@@ -3,13 +3,14 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/lvhungdev/text/command"
+	c "github.com/lvhungdev/text/common"
 	"github.com/lvhungdev/text/editor"
-	"github.com/lvhungdev/text/renderer"
+	"github.com/lvhungdev/text/render"
 )
 
 func main() {
@@ -29,10 +30,10 @@ func main() {
 		panic(err)
 	}
 
-	w, h := screen.Size()
-	region := renderer.NewRegion(0, 0, w, h)
+	// w, h := screen.Size()
+	region := render.NewRegion(2, 4, 40, 20)
 
-	r := renderer.NewRenderer(screen, &e, region)
+	r := render.NewRenderer(screen, &e, region)
 
 	for {
 		ev := screen.PollEvent()
@@ -43,11 +44,17 @@ func main() {
 		// 	e.syncScreenSize()
 
 		case *tcell.EventKey:
-			if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC {
+			if ev.Key() == tcell.KeyCtrlQ {
 				return
+			} else if ev.Modifiers() == tcell.ModCtrl {
+				continue
+			} else if ev.Modifiers() == tcell.ModAlt && ev.Key() == tcell.KeyLeft {
+				fmt.Println("asd")
+				continue
 			}
+
 			// TODO handle error
-			_ = e.HandleCommand(command.Get(ev))
+			_ = e.HandleCommand(c.GetCommand(ev))
 		}
 
 		r.Render()

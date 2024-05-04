@@ -1,4 +1,4 @@
-package utils
+package common
 
 func SliceInsertAt[T any](slice []T, index int, el T) []T {
 	if index < 0 || index > len(slice) {

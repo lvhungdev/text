@@ -1,19 +1,14 @@
 package editor
 
 import (
-	"github.com/lvhungdev/text/command"
+	c "github.com/lvhungdev/text/common"
 )
-
-type point struct {
-	row int
-	col int
-}
 
 type Editor struct {
 	content  [][]rune
-	cur      point
-	selBegin point
-	selEnd   point
+	cur      c.Point
+	selBegin c.Point
+	selEnd   c.Point
 }
 
 func New(content [][]rune) Editor {
@@ -31,28 +26,28 @@ func (e *Editor) Content() [][]rune {
 }
 
 func (e *Editor) Cursor() (int, int) {
-	return e.cur.row, e.cur.col
+	return e.cur.Row, e.cur.Col
 }
 
-func (e *Editor) Selection() (int, int, int, int) {
-	return e.selBegin.row, e.selBegin.col, e.selEnd.row, e.selEnd.col
+func (e *Editor) Selection() (c.Point, c.Point) {
+	return e.selBegin, e.selEnd
 }
 
-func (e *Editor) HandleCommand(cmd command.Command) error {
+func (e *Editor) HandleCommand(cmd c.Command) error {
 	switch cmd := cmd.(type) {
-	case command.InsertChar:
+	case c.InsertChar:
 		e.insertChar(cmd.Char)
-	case command.InsertNewLine:
+	case c.InsertNewLine:
 		e.insertNewLine()
-	case command.DelChar:
+	case c.DelChar:
 		e.deleteChar()
-	case command.MovCurDown:
+	case c.MovCurDown:
 		e.movCurDown(cmd.Sel)
-	case command.MovCurUp:
+	case c.MovCurUp:
 		e.movCurUp(cmd.Sel)
-	case command.MovCurRight:
+	case c.MovCurRight:
 		e.movCurRight(cmd.Sel)
-	case command.MovCurLeft:
+	case c.MovCurLeft:
 		e.movCurLeft(cmd.Sel)
 	}
 

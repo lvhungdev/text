@@ -1,4 +1,4 @@
-package renderer
+package render
 
 import "github.com/gdamore/tcell/v2"
 
