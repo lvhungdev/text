@@ -4,12 +4,12 @@ import (
 	c "github.com/lvhungdev/text/common"
 )
 
-func (e *Editor) insertChar(char rune) {
+func (e *Editor) InsertChar(char rune) {
 	e.content[e.cur.Row] = c.SliceInsertAt(e.content[e.cur.Row], e.cur.Col, char)
 	e.cur.Col++
 }
 
-func (e *Editor) insertNewLine() {
+func (e *Editor) InsertNewLine() {
 	if e.cur.Col == 0 {
 		e.content = c.SliceInsertAt(e.content, e.cur.Row, []rune{})
 	} else if e.cur.Col == len(e.content[e.cur.Row]) {
@@ -26,7 +26,7 @@ func (e *Editor) insertNewLine() {
 	e.cur.Col = 0
 }
 
-func (e *Editor) deleteChar() {
+func (e *Editor) DeleteChar() {
 	if e.cur.Col == 0 && e.cur.Row == 0 {
 		return
 	}

@@ -1,6 +1,6 @@
 package editor
 
-func (e *Editor) movCurDown(sel bool) {
+func (e *Editor) MovCurDown(sel bool) {
 	if e.cur.Row == len(e.content)-1 {
 		return
 	}
@@ -14,7 +14,7 @@ func (e *Editor) movCurDown(sel bool) {
 	e.handleSel(sel)
 }
 
-func (e *Editor) movCurUp(sel bool) {
+func (e *Editor) MovCurUp(sel bool) {
 	if e.cur.Row == 0 {
 		return
 	}
@@ -28,7 +28,7 @@ func (e *Editor) movCurUp(sel bool) {
 	e.handleSel(sel)
 }
 
-func (e *Editor) movCurRight(sel bool) {
+func (e *Editor) MovCurRight(sel bool) {
 	if e.cur.Col == len(e.content[e.cur.Row]) {
 		return
 	}
@@ -37,7 +37,7 @@ func (e *Editor) movCurRight(sel bool) {
 	e.handleSel(sel)
 }
 
-func (e *Editor) movCurLeft(sel bool) {
+func (e *Editor) MovCurLeft(sel bool) {
 	if e.cur.Col == 0 {
 		return
 	}

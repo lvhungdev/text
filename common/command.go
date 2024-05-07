@@ -31,9 +31,7 @@ type MovCurLeft struct {
 
 type Save struct{}
 
-func GetCommand(e *tcell.EventKey) Command {
-	mod, key, ch := e.Modifiers(), e.Key(), e.Rune()
-
+func GetCommand(mod tcell.ModMask, key tcell.Key, ch rune) Command {
 	switch key {
 	case tcell.KeyEnter:
 		return InsertNewLine{}

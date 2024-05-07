@@ -32,24 +32,3 @@ func (e *Editor) Cursor() (int, int) {
 func (e *Editor) Selection() (c.Point, c.Point) {
 	return e.selBegin, e.selEnd
 }
-
-func (e *Editor) HandleCommand(cmd c.Command) error {
-	switch cmd := cmd.(type) {
-	case c.InsertChar:
-		e.insertChar(cmd.Char)
-	case c.InsertNewLine:
-		e.insertNewLine()
-	case c.DelChar:
-		e.deleteChar()
-	case c.MovCurDown:
-		e.movCurDown(cmd.Sel)
-	case c.MovCurUp:
-		e.movCurUp(cmd.Sel)
-	case c.MovCurRight:
-		e.movCurRight(cmd.Sel)
-	case c.MovCurLeft:
-		e.movCurLeft(cmd.Sel)
-	}
-
-	return nil
-}
