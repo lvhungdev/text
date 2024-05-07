@@ -98,9 +98,23 @@ func (a *App) HandleCommand(cmd c.Command) error {
 		a.editor.MovCurRight(cmd.Sel)
 	case c.MovCurLeft:
 		a.editor.MovCurLeft(cmd.Sel)
+
+	case c.Save:
+		return a.Save()
 	}
 
 	return nil
+}
+
+func (a *App) Save() error {
+	data := []rune{}
+
+	for _, line := range a.editor.Content() {
+		data = append(data, line...)
+		data = append(data, '\n')
+	}
+
+	return os.WriteFile(a.path, []byte(string(data)), 0644)
 }
 
 func readFile(path string) ([][]rune, error) {
