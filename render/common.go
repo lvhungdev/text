@@ -18,15 +18,6 @@ type region struct {
 	height int
 }
 
-func NewRegion(row, col, width, height int) region {
-	return region{
-		row:    row,
-		col:    col,
-		width:  width,
-		height: height,
-	}
-}
-
 func renderChar(screen tcell.Screen, region region, row, col int, ch rune, style tcell.Style) {
 	if row < 0 || row >= region.height || col < 0 || col >= region.width {
 		return

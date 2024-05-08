@@ -14,12 +14,15 @@ type Renderer struct {
 	offset c.Point
 }
 
-func NewRenderer(screen tcell.Screen, editor editor, region region) Renderer {
+func NewRenderer(screen tcell.Screen, editor editor) Renderer {
 	return Renderer{
 		screen: screen,
-		region: region,
 		editor: editor,
 	}
+}
+
+func (r *Renderer) SetRegion(row, col, width, height int) {
+	r.region = region{row, col, width, height}
 }
 
 func (r *Renderer) Render() {

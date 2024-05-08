@@ -42,7 +42,8 @@ func New(path string) (*App, error) {
 	}
 
 	w, h := scr.Size()
-	renderer := render.NewRenderer(scr, &e, render.NewRegion(0, 0, w, h))
+	renderer := render.NewRenderer(scr, &e)
+	renderer.SetRegion(0, 0, w, h)
 
 	return &App{
 		screen:   scr,
@@ -57,9 +58,9 @@ func (a *App) Start() error {
 		ev := a.screen.PollEvent()
 
 		switch ev := ev.(type) {
-		// TODO handle event resize
-		// case *tcell.EventResize:
-		// 	e.syncScreenSize()
+		case *tcell.EventResize:
+			w, h := a.screen.Size()
+			a.renderer.SetRegion(0, 0, w, h)
 
 		case *tcell.EventKey:
 			mod, key, ch := ev.Modifiers(), ev.Key(), ev.Rune()

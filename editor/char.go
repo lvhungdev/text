@@ -16,10 +16,10 @@ func (e *Editor) InsertNewLine() {
 		e.content = c.SliceInsertAt(e.content, e.cur.Row+1, []rune{})
 	} else {
 		current := e.content[e.cur.Row][:e.cur.Col]
-		new := e.content[e.cur.Row][e.cur.Col:]
+		next := e.content[e.cur.Row][e.cur.Col:]
 
 		e.content[e.cur.Row] = current
-		e.content = c.SliceInsertAt(e.content, e.cur.Row+1, new)
+		e.content = c.SliceInsertAt(e.content, e.cur.Row+1, next)
 	}
 
 	e.cur.Row++
